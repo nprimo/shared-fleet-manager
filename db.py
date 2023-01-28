@@ -16,8 +16,8 @@ def add_new_car(car_name: str) -> str:
     msg = ''
     exp_file = db_dir + car_name + '.json'
     try:
-        with open(exp_file, 'x'):
-            pass
+        with open(exp_file, 'w') as f:
+            f.write('{}')
         msg = f'succesfully added {car_name} to the database'
     except Exception:
         msg = f'{car_name} is already present in the database'
@@ -25,13 +25,13 @@ def add_new_car(car_name: str) -> str:
 
 
 # assume the file of the car is existing!
-def update_car(car_name: str, new_prop: dict) -> str:
+def update_car(car_name: str, new_info: dict) -> str:
     exp_file = db_dir + car_name + '.json'
     time = dt.datetime.now()
     time_str = time.strftime(time_fmt)
     with open(exp_file, 'r+') as f:
         cont = json.load(f)
-    cont[time_str] = new_prop
+    cont[time_str] = new_info
     with open(exp_file, 'w') as f:
         json.dump(cont, f)
     msg = f'{car_name} updated succesfully'
@@ -47,7 +47,8 @@ def get_car_last_info(car_name: str) -> str:
                  for date in car_log.keys()]
     last_update = sorted(log_dates)[-1].strftime(time_fmt)
     last_info = car_log[last_update]
-    return json.dumps(last_info)
+    msg = f"last positon from {last_info['user']}: {last_info['location']}"
+    return msg
 
 
 if __name__ == "__main__":
