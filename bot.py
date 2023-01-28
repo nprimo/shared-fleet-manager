@@ -1,4 +1,5 @@
 import discord
+import urllib
 from db import add_new_car, is_car_in_db, get_car_last_info, update_car
 
 
@@ -24,8 +25,11 @@ def where(message: discord.Message, av: list[str]) -> str:
 
 
 def is_location_valid(new_location: str) -> bool:
-    # check if location is a valid - for example Gmap?
-    return True
+    parsed_url = urllib.parse.urlparse(new_location)
+    if 'goo.gl' in parsed_url.netloc and\
+            ('maps' in parsed_url.netloc or 'maps' in parsed_url.path):
+        return True
+    return False
 
 
 def update(message: discord.Message, av: list[str]) -> str:
