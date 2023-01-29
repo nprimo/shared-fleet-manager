@@ -8,7 +8,7 @@ async def hello(message: discord.Message, av: list[str]) -> str:
     return f'Hello {message.author.mention}'
 
 
-def add(message: discord.Message, av: list[str]) -> str:
+async def add(message: discord.Message, av: list[str]) -> str:
     if len(av) != 2:
         return 'Wrong number of arguments! Run: $add <name of the car>'
     car_name = av[1].lower()
@@ -18,7 +18,7 @@ def add(message: discord.Message, av: list[str]) -> str:
     return add_new_car(av[1])
 
 
-def where(message: discord.Message, av: list[str]) -> str:
+async def where(message: discord.Message, av: list[str]) -> str:
     if len(av) != 2:
         return 'Wrong number of arguments! Run: $where <name of the car>'
     car_name = av[1].lower()
@@ -36,12 +36,13 @@ def is_location_valid(new_location: str) -> bool:
     return False
 
 
-def update(message: discord.Message, av: list[str]) -> str:
+async def update(message: discord.Message, av: list[str]) -> str:
     if len(av) != 3:
         return """Wrong number of arguments!
     Run: $update <name of the car> <new poistion - google maps link>"""
     car_name = av[1].lower()
     if is_car_in_db(car_name) and is_location_valid(av[2]):
+        print(f'location valid: {is_location_valid(av[2])}')
         # maybe check if the user is allowed to update position
         new_info = {
             'location': av[2],
