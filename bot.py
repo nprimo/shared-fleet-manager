@@ -1,6 +1,7 @@
 import discord
 import urllib
-from db import add_new_car, is_car_in_db, get_car_last_info, update_car
+from db import add_new_car, get_car_raw_info, get_cars_available,\
+        is_car_in_db, get_car_last_info, update_car
 
 
 async def hello(message: discord.Message, av: list[str]) -> str:
@@ -52,6 +53,23 @@ async def update(message: discord.Message, av: list[str]) -> str:
     return f'{car_name} is not in the database! Add the car with $add command'
 
 
+async def info(message: discord.Message, av: list[str]) -> str:
+    if len(av) != 2:
+        return """Wrong number of arguments!
+    Run: $info <name of car> or $info all
+    """
+    car_name = av[1].lower()
+    if is_car_in_db(car_name):
+        await message.author.send(get_car_raw_info(car_name))
+        msg = f'{message.author.mention} check your DM'
+    elif car_name == 'all':
+        msg = 'The available cars are:\n'
+        msg += '\n'.join(get_cars_available())
+    else:
+        msg = f'{car_name} not available'
+    return msg
+
+
 async def commands(key: str, message: discord.Message, av: list[str]) -> str:
     commands = {
         # help -> show all the commands options
@@ -59,8 +77,8 @@ async def commands(key: str, message: discord.Message, av: list[str]) -> str:
         '$add': add,
         '$where': where,
         '$update': update,
+        '$info': info,
         # reserve ?
-        # info -> share all the raw data in private message
     }
     command_to_exec = commands.get(key)
     if command_to_exec:

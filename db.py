@@ -11,6 +11,11 @@ def is_car_in_db(car_name: str) -> bool:
     return os.path.exists(exp_file)
 
 
+def get_cars_available() -> list[str]:
+    file_in_db = os.listdir(db_dir)
+    return [file.split('.')[0] for file in file_in_db]
+
+
 # assume the file of the car is existing!
 def add_new_car(car_name: str) -> str:
     msg = ''
@@ -33,7 +38,7 @@ def update_car(car_name: str, new_info: dict) -> str:
         cont = json.load(f)
     cont[time_str] = new_info
     with open(exp_file, 'w') as f:
-        json.dump(cont, f)
+        json.dump(cont, f, indent=2)
     msg = f'{car_name} updated succesfully'
     return msg
 
@@ -51,6 +56,13 @@ def get_car_last_info(car_name: str) -> str:
     last_info = car_log[last_update]
     msg = f"last positon from {last_info['user']}: {last_info['location']}"
     return msg
+
+
+def get_car_raw_info(car_name: str) -> str:
+    exp_file = db_dir + car_name + '.json'
+    with (open(exp_file, 'r') as f):
+        car_log = json.load(f)
+    return json.dumps(car_log, indent=2)
 
 
 if __name__ == "__main__":
