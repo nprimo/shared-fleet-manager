@@ -1,15 +1,14 @@
 import discord
 import urllib
 from db import add_new_car, get_car_raw_info, get_cars_available,\
-        is_car_in_db, get_car_last_info, update_car
+    is_car_in_db, get_car_last_info, update_car
 
 
-async def hello(message: discord.Message, av: list[str]) -> str:
-    await message.author.send('hello')
+def hello(message: discord.Message, av: list[str]) -> str:
     return f'Hello {message.author.mention}'
 
 
-async def add(message: discord.Message, av: list[str]) -> str:
+def add(message: discord.Message, av: list[str]) -> str:
     if len(av) != 2:
         return 'Wrong number of arguments! Run: $add <name of the car>'
     car_name = av[1].lower()
@@ -19,7 +18,7 @@ async def add(message: discord.Message, av: list[str]) -> str:
     return add_new_car(av[1])
 
 
-async def where(message: discord.Message, av: list[str]) -> str:
+def where(message: discord.Message, av: list[str]) -> str:
     if len(av) != 2:
         return 'Wrong number of arguments! Run: $where <name of the car>'
     car_name = av[1].lower()
@@ -37,7 +36,7 @@ def is_location_valid(new_location: str) -> bool:
     return False
 
 
-async def update(message: discord.Message, av: list[str]) -> str:
+def update(message: discord.Message, av: list[str]) -> str:
     if len(av) != 3:
         return """Wrong number of arguments!
     Run: $update <name of the car> <new poistion - google maps link>"""
@@ -53,15 +52,14 @@ async def update(message: discord.Message, av: list[str]) -> str:
     return f'{car_name} is not in the database! Add the car with $add command'
 
 
-async def info(message: discord.Message, av: list[str]) -> str:
+def info(message: discord.Message, av: list[str]) -> str:
     if len(av) != 2:
         return """Wrong number of arguments!
     Run: $info <name of car> or $info all
     """
     car_name = av[1].lower()
     if is_car_in_db(car_name):
-        await message.author.send(get_car_raw_info(car_name))
-        msg = f'{message.author.mention} check your DM'
+        msg = get_car_raw_info(car_name)
     elif car_name == 'all':
         msg = 'The available cars are:\n'
         msg += '\n'.join(get_cars_available())
@@ -70,7 +68,7 @@ async def info(message: discord.Message, av: list[str]) -> str:
     return msg
 
 
-async def commands(key: str, message: discord.Message, av: list[str]) -> str:
+def commands(key: str, message: discord.Message, av: list[str]) -> str:
     commands = {
         # help -> show all the commands options
         '$hello': hello,
@@ -82,5 +80,5 @@ async def commands(key: str, message: discord.Message, av: list[str]) -> str:
     }
     command_to_exec = commands.get(key)
     if command_to_exec:
-        return await command_to_exec(message, av)
+        return command_to_exec(message, av)
     return 'Unknown command'
