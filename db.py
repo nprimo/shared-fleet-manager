@@ -45,6 +45,8 @@ def get_car_last_info(car_name: str) -> str:
         car_log = json.load(f)
     log_dates = [dt.datetime.strptime(date, time_fmt)
                  for date in car_log.keys()]
+    if len(log_dates) == 0:
+        return f'no information yet for {car_name}'
     last_update = sorted(log_dates)[-1].strftime(time_fmt)
     last_info = car_log[last_update]
     msg = f"last positon from {last_info['user']}: {last_info['location']}"
