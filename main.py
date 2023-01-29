@@ -20,12 +20,12 @@ async def on_ready():
 
 
 @client.event
-async def on_message(message):
+async def on_message(message: discord.Message):
     print(message.author, message.channel.id, message.content)
     if message.content.startswith(command_prompt):
         channel = message.channel
         av = re.split(r'\s+', message.content)
-        reply = bot.commands(av[0], message, av)
+        reply = await bot.commands(av[0].lower(), message, av)
 
         await channel.send(reply)
 
