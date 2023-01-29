@@ -3,6 +3,7 @@ import re
 import os
 from dotenv import load_dotenv
 import bot
+from always_on import keep_alive
 
 
 load_dotenv()
@@ -30,4 +31,5 @@ async def on_message(message: discord.Message):
         await channel.send(reply)
 
 if __name__ == "__main__":
+    keep_alive()
     client.run(TOKEN)
