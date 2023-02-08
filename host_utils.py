@@ -1,5 +1,7 @@
 from flask import Flask
 from threading import Thread
+import os
+import subprocess
 
 app = Flask('')
 
@@ -16,3 +18,10 @@ def run():
 def keep_alive():
     t = Thread(target=run)
     t.start()
+
+
+def restart_bot():
+    print("===== An error occured - restarting now ====")
+    subprocess.call(["sleep", "5", "&&", "python3", "main.py"])
+    os.system("kill 1")
+    return

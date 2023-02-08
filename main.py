@@ -3,7 +3,7 @@ import re
 import os
 from dotenv import load_dotenv
 import bot
-from always_on import keep_alive
+from host_utils import keep_alive, restart_bot
 
 
 load_dotenv()
@@ -32,4 +32,7 @@ async def on_message(message: discord.Message):
 
 if __name__ == "__main__":
     keep_alive()
-    client.run(TOKEN)
+    try:
+        client.run(TOKEN)
+    except discord.errors.HTTPException:
+        restart_bot()
