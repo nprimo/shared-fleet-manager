@@ -30,9 +30,14 @@ async def on_message(message: discord.Message):
 
         await channel.send(reply)
 
-if __name__ == "__main__":
+
+def main():
     keep_alive()
     try:
         client.run(TOKEN)
     except discord.errors.HTTPException:
         restart_bot()
+
+
+if __name__ == "__main__":
+    main()
