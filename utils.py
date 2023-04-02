@@ -1,9 +1,8 @@
 import urllib
 import discord
 
+
 # Error messages
-
-
 def car_not_in_db(car_name: str) -> str:
     return f'{car_name} is not in the database!'
 
